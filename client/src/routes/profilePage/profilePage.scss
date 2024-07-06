@@ -33,9 +33,11 @@
         h1{
           font-weight: 300;
         }
-
         button{
-          padding: 12px 24px;
+          display: flex;
+          align-items: center;
+          gap: 20px;
+          padding: 12px 18px;
           background-color: #f2ba26;
           cursor: pointer;
           border: none;
@@ -52,7 +54,15 @@
           align-items: center;
           gap: 20px;
         }
-
+        button{
+          width: 100px;
+          background-color: #D42617;
+          border: none;
+          color: white;
+          padding: 10px 20px;
+          cursor: pointer;
+          border-radius: 5px;
+        }
         img{
           width: 40px;
           height: 40px;
@@ -62,7 +72,7 @@
       }
     }
   }
-  .chatContainer {
+  .becomeDonorContainer {
     flex: 2;
     background-color: #FBE3D9;
     height: 100%;
