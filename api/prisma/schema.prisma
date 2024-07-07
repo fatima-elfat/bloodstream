@@ -38,4 +38,14 @@ model Tech {
   createdAt  DateTime    @default(now())
   user       User        @relation(fields: [userId], references: [id])
   userId     String      @unique @db.ObjectId
+  bank       Bank        @relation(fields: [bankId], references: [id])
+  bankId     String      @unique @db.ObjectId
+}
+model Bank {
+  id          String      @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  body        String
+  latitude    Float
+  longitude   Float
+  tech        Tech?
 }
