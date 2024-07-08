@@ -9,7 +9,7 @@ export const addBank = async (req, res) => {
     if (!isAdmin) {
       return res.status(403).json({ message: "Not Authorized!" });
     }
-    const { all } = req.body;
+    const { ...all } = req.body;
     try {
         const newBank = await prisma.bank.create({
           data: {
@@ -84,12 +84,6 @@ export const deleteBank = async (req, res) => {
   if (id !== tokenBankId && !isAdmin) {
     return res.status(403).json({ message: "Not Authorized!" });
   }
-  const updatedUser = await prisma.tech.update({
-    where: { bankId: id },
-    data: {
-        bankId: null,
-    },
-  });
   try {
     await prisma.bank.delete({
       where: { id },
