@@ -38,7 +38,11 @@ export const addTech = async (req, res) => {
 
 export const getTechs = async (req, res) => {
   try {
-    const techs = await prisma.tech.findMany();
+    const techs = await prisma.tech.findMany({
+      include: {
+        bank: true,
+        },
+    });
     res.status(200).json(techs);
   } catch (err) {
     console.log(err);
@@ -50,6 +54,10 @@ export const getTech = async (req, res) => {
   const id = req.params.id;
   try {
     const tech = await prisma.tech.findUnique({
+      
+      include: {
+        bank: true,
+      },
       where: { id },
     });
     res.status(200).json(tech);
