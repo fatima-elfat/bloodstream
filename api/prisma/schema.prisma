@@ -6,7 +6,7 @@
 
 generator client {
   provider = "prisma-client-js"
-  previewFeatures = ["omitApi"]
+  previewFeatures = ["omitApi", "relationJoins"]
 }
 
 datasource db {
@@ -30,22 +30,59 @@ model User {
   isDonnor      Boolean     @default(false)
   createdAt     DateTime    @default(now())
   tech          Tech?
+  donor         Donor?
 }
 
 model Tech {
   id         String      @id @default(auto()) @map("_id") @db.ObjectId
   title      String
   createdAt  DateTime    @default(now())
-  user       User        @relation(fields: [userId], references: [id])
-  userId     String      @unique @db.ObjectId
-  bank       Bank        @relation(fields: [bankId], references: [id])
-  bankId     String      @unique @db.ObjectId
+  user       User?        @relation(fields: [userId], references: [id], onDelete: SetNull, onUpdate: Cascade)
+  userId     String?     @unique @db.ObjectId
+  bank       Bank?        @relation(fields: [bankId], references: [id], onDelete: SetNull, onUpdate: Cascade)
+  bankId     String?      @unique @db.ObjectId
+  donation   Donation?
 }
 model Bank {
   id          String      @id @default(auto()) @map("_id") @db.ObjectId
   name        String
-  body        String
+  description String
   latitude    Float
   longitude   Float
   tech        Tech?
+}
+
+model Donation {
+  id            String      @id @default(auto()) @map("_id") @db.ObjectId
+  title         String
+  description   String
+  bloodGroup    String[]
+  level         String
+  neededDonors  Int
+  createdAt     DateTime    @default(now())
+  tech          Tech?        @relation(fields: [techId], references: [id], onDelete: SetNull, onUpdate: Cascade)
+  techId        String?      @unique @db.ObjectId
+  donationR     DonationRecord?
+}
+
+model Donor {
+  id            String      @id @default(auto()) @map("_id") @db.ObjectId
+  firstName     String
+  lastName      String
+  bloodType     String
+  lastDonation  DateTime?
+  createdAt     DateTime    @default(now())
+  user          User?        @relation(fields: [userId], references: [id], onDelete: SetNull, onUpdate: Cascade)
+  userId        String?      @unique @db.ObjectId
+  donationR     DonationRecord?
+}
+
+model DonationRecord {
+  id            String      @id @default(auto()) @map("_id") @db.ObjectId
+  bloodVolume   Int
+  createdAt     DateTime    @default(now())
+  donor         Donor?        @relation(fields: [donorId], references: [id], onDelete: SetNull, onUpdate: Cascade)
+  donorId       String?      @unique @db.ObjectId
+  donation      Donation?       @relation(fields: [donationId], references: [id], onDelete: SetNull, onUpdate: Cascade)
+  donationId    String?      @unique @db.ObjectId
 }
