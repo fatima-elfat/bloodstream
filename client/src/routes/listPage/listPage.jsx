@@ -3,21 +3,40 @@ import "./listPage.scss";
 import Filter from "../../components/filter/Filter"
 import Card from "../../components/card/Card"
 import Map from "../../components/map/Map";
+import apiRequest from "../../lib/apiRequest";
+import { useEffect, useState } from "react";
 
 function ListPage() {
-  const data = listData;
+  useEffect(() => {
+    getDonations();
+  }, []);
+  const [donation, setDonation] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const getDonations = () => {
+    apiRequest
+      .get(`/donations`)
+      .then((res) => {
+        setDonation(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   return <div className="listPage">
     <div className="listContainer">
       <div className="wrapper">
-        <Filter/>
-        {data.map(item=>(
+        <Filter item={"Calls for blood donations"}/>
+        {donation.map(item=>(
           <Card key={item.id} item={item}/>
         ))}
       </div>
     </div>
     <div className="mapContainer">
-      <Map items={data}/>
+    <Map items={donation.map(item=>
+          item=item.tech.bank
+        )}/>
     </div>
   </div>;
 }

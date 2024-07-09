@@ -29,19 +29,36 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-
+        
         h1{
           font-weight: 300;
         }
-
+        
         button{
-          padding: 12px 24px;
+          display: flex;
+          align-items: center;
+          gap: 20px;
+          padding: 12px 18px;
           background-color: #f2ba26;
           cursor: pointer;
           border: none;
         }
       }
-
+      .role{
+        
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        span {
+          display: flex;
+          align-items: center;
+          color:white;
+          background-color: #1A5432 ;
+          font-size: 13px;
+          padding: 12px 12px;
+          border-radius: 10px;
+        }
+      }
       .info{
         display: flex;
         flex-direction: column;
@@ -52,7 +69,15 @@
           align-items: center;
           gap: 20px;
         }
-
+        button{
+          width: 100px;
+          background-color: #D42617;
+          border: none;
+          color: white;
+          padding: 10px 20px;
+          cursor: pointer;
+          border-radius: 5px;
+        }
         img{
           width: 40px;
           height: 40px;
@@ -62,7 +87,7 @@
       }
     }
   }
-  .chatContainer {
+  .becomeDonorContainer {
     flex: 2;
     background-color: #FBE3D9;
     height: 100%;

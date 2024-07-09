@@ -11,29 +11,14 @@ function Card({ item }) {
     <div className="card">
       <div className="textContainer">
         <h2 className="title">
-          <Link to={`/${item.id}`}>{item.title}</Link>
+          <Link to={`/banks/${item.id}`}>{item.name}</Link>
         </h2>
-        <p className="codeRequest">
-          <span>Code :{item.id}</span>
-        </p>
-        <p className="type"> Blood Type: {item.bloodGroup.map(item=>
-          "   [" + item.split() + "   ]" 
-        )}</p>
         <p className="address">
           <img src={ Pin } alt="" />
-          <span>{item.address}</span>
+          <span>{item.description}</span>
         </p>
         <div className="bottom">
-          <div className="features">
-            <div className="level">
-              <span >Level {item.level}</span>
-            </div>
-            <div className="feature">
-              <img src={ People } alt="" />
-              <span>{item.neededDonors} donor needed</span>
-            </div>
-          </div>
-          <div className="icons">
+        <div className="icons">
             <div className="icon">
             <Link to={`/${item.id}`}><img src={ Donate } alt="Take an appointment for donation" /></Link>
             </div>

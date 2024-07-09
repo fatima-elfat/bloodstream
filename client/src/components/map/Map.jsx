@@ -4,6 +4,7 @@ import "leaflet/dist/leaflet.css";
 import Pin from '../pin/Pin';
 
 function Map({items}){
+  console.log(items)
   return (
     <MapContainer center={[30.233334, -8.500000]} zoom={5} scrollWheelZoom={false} className='map'>
     <TileLayer

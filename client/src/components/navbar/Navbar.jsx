@@ -4,12 +4,14 @@ import Menu from "../../assets/asset01.png"
 import Pdp from "../../assets/asset06.png"
 import "./navbar.scss";
 import { Link } from "react-router-dom";
-
+import { AuthContext } from "../../context/AuthProvider";
+import { useContext } from "react";
 
 function Navbar() {
   const [open, setOpen] = useState(false);
 
-  const user = true;
+  const { currentUser } = useContext(AuthContext);
+
   return (
     <nav>
       <div className="left">
@@ -19,26 +21,22 @@ function Navbar() {
         </a>
         <a href="/">Home</a>
         <a href="/">About</a>
-        <a href="/">Contact</a>
-        <a href="/list">Donations</a>
+        <a href="/banks">Banks</a>
+        <a href="/donations">Donations</a>
       </div>
       <div className="right">
-        {user ? (
+        {currentUser ? (
           <div className="user">
-            <img
-              src={ Pdp}
-              alt=""
-            />
-            <span>John Doe</span>
+            <img src={currentUser.avatar || Pdp} alt="" />
+            <span>{currentUser.username}</span>
             <Link to="/profile" className="profile">
-              <div className="notification">3</div>
               <span>Profile</span>
             </Link>
           </div>
         ) : (
           <>
-            <a href="/">Sign in</a>
-            <a href="/" className="register">
+            <a href="/login">Sign in</a>
+            <a href="/register" className="regiter">
               Sign up
             </a>
           </>

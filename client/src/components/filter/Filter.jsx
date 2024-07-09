@@ -1,11 +1,11 @@
 import "./filter.scss";
 import Search from "../../assets/asset07.png"
 
-function Filter() {
+function Filter({item}) {
   return (
     <div className="filter">
       <h1>
-        Search results for <b>Donation requests</b>
+        <b>{item}</b>
       </h1>
       <div className="top">
         <div className="item">
