@@ -1,4 +1,4 @@
-import "./singlePage.scss";
+import "./bankPage.scss";
 import Map from "../../components/map/Map";
 import  People from "../../assets/asset02.png";
 import  Donate from "../../assets/asset04.png";
@@ -7,20 +7,18 @@ import apiRequest from "../../lib/apiRequest";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
-function SinglePage() {
+function BankPage() {
   const { id } = useParams();
   useEffect(() => {
-    getDonation();
+    getBank();
   }, []);
-  const [donation, setDonation] = useState([]);
   const [bank, setBank] = useState([]);
   const [isLoaded, setIsLoaded] = useState(null);
-  const getDonation = () => {
+  const getBank = () => {
     apiRequest
-      .get(`/donations/donation/${id}`)
+      .get(`/banks/bank/${id}`)
       .then((res) => {
-        setDonation(res.data);
-        setBank(res.data.tech.bank);
+        setBank(res.data);
       })
       .catch((err) => {
         console.log(err);
@@ -41,27 +39,18 @@ function SinglePage() {
                   Share
                   </button>
               </div>
-                <h1>{donation.title}</h1>
+                <h1>{bank.title}</h1>
                 <div className="address">
                   <img src="/pin.png" alt="" />
                   <span>{bank.name}</span>
 
                 </div>
-                <div className="donation">
-                <div className="detail">
-                  <span>Level {donation.level}</span>
-                </div>
-                <div className="detail"> Blood Type: {donation.bloodGroup}</div>
-              <div className="detail">
-                <img src={ People } alt="" />
-                <span>{donation.neededDonors} donor needed</span>
-              </div>
-              </div>
-              <p className="type">Code :{donation.id}</p>
+                
+              <p className="type">Code :{bank.id}</p>
             </div>
               
             </div>
-            <div className="bottom">{donation.description}</div>
+            <div className="bottom">{bank.description}</div>
           </div>
         </div>
       </div>
@@ -70,7 +59,7 @@ function SinglePage() {
           
           <p className="title">Location</p>
               <div className="mapContainer">
-              <Map items={[]}/>
+                <Map items={[]}/>
               </div>
             <p className="title">Book an appointment</p>
             <div className="feature">
@@ -89,4 +78,4 @@ function SinglePage() {
   );
 }
 
-export default SinglePage;
+export default BankPage;

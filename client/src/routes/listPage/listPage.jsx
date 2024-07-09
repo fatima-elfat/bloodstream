@@ -27,7 +27,7 @@ function ListPage() {
   return <div className="listPage">
     <div className="listContainer">
       <div className="wrapper">
-        <Filter/>
+        <Filter item={"Calls for blood donations"}/>
         {donation.map(item=>(
           <Card key={item.id} item={item}/>
         ))}

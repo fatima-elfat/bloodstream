@@ -10,6 +10,8 @@ import ProfilePage from "./routes/profilePage/profilePage";
 import Login from "./routes/login/login";
 import Register from "./routes/register/register";
 import ProfileUpdatePage from "./routes/profileUpdatePage/profileUpdatePage";
+import BanksPage from "./routes/banksPage/banksPage";
+import BankPage from "./routes/bankPage/bankPage";
 
 function App() {
   const router = createBrowserRouter([
@@ -22,7 +24,15 @@ function App() {
           element:<HomePage/>
         },
         {
-          path:"/list",
+          path:"/banks",
+          element:<BanksPage/>
+        },
+        {
+          path:"banks/:id",
+          element:<BankPage/>
+        },
+        {
+          path:"/donations",
           element:<ListPage/>
         },
         {
