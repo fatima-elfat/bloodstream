@@ -17,7 +17,7 @@ function HomePage() {
             repellat provident impedit!
           </p>
           
-          <Link to="/list" className="list">
+          <Link to="/donations" className="list">
           <span>Start Now</span>
           </Link>
           <div className="boxes">
