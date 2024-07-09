@@ -12,15 +12,22 @@ function ProfileUpdatePage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
-    const { username, email, password } = Object.fromEntries(formData);
+    const { username,
+      email, 
+      mobileNumber,
+      dateOfBirth,
+      city 
+    } = Object.fromEntries(formData);
 
     try {
       const res = await apiRequest.put(`/users/${currentUser.id}`, {
         username,
         email,
-        password,
-        avatar:avatar[0]
+        mobileNumber,
+        dateOfBirth,
+        city
       });
+      console.log(res);
       updateUser(res.data);
       navigate("/profile");
     } catch (err) {
@@ -31,7 +38,7 @@ function ProfileUpdatePage() {
   return (
     <div className="profileUpdatePage">
       <div className="formContainer">
-        <form>
+        <form onSubmit={handleSubmit}>
           <h1>Update Profile</h1>
           <div className="item">
             <label htmlFor="username">Username</label>
@@ -50,10 +57,6 @@ function ProfileUpdatePage() {
               type="email"
               defaultValue={currentUser.email}
             />
-          </div>
-          <div className="item">
-            <label htmlFor="password">Password</label>
-            <input id="password" name="password" type="password" />
           </div>
           <div className="item">
             <label htmlFor="mobileNumber">Mobile number</label>
