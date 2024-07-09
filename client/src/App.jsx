@@ -28,7 +28,7 @@ function App() {
           element:<BanksPage/>
         },
         {
-          path:"banks/:id",
+          path:"/banks/:id",
           element:<BankPage/>
         },
         {
