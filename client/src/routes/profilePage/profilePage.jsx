@@ -26,10 +26,30 @@ function ProfilePage() {
         <div className="wrapper">
           <div className="title">
             <h1>User Information</h1>
+            
             <Link to="/profile/update">
             <button>Update Profile</button>
             </Link>
+            
           </div>
+          
+          <div className="role">
+          {currentUser.isDonnor ? (
+              <span>Donor</span>
+            ) : (
+              <></>
+            )}
+            {currentUser.isTech ? (
+              <span>Technicien</span>
+            ) : (
+              <></>
+            )}
+            {currentUser.isAdmin ? (
+              <span>Admin</span>
+            ) : (
+              <></>
+            )}
+            </div>
           <div className="info">
             <span>
               Avatar:
@@ -70,6 +90,7 @@ function ProfilePage() {
           {currentUser.isAdmin ? (
             <>
             <button>Manage Users</button>
+            <button>Manage Blood Banks</button>
             </>
           ) : (<></>)}
           </div>

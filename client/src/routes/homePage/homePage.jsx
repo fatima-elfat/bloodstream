@@ -1,5 +1,6 @@
 import SearchBar from "../../components/searchBar/SearchBar";
 import "./homePage.scss";
+import { Link } from "react-router-dom";
 import BG from "../../assets/asset09.png"
 
 
@@ -15,7 +16,10 @@ function HomePage() {
             facilis id pariatur fugit quos laudantium temporibus dolor ea
             repellat provident impedit!
           </p>
-          <SearchBar />
+          
+          <Link to="/list" className="list">
+          <span>Start Now</span>
+          </Link>
           <div className="boxes">
             <div className="box">
               <h1>1000+</h1>

@@ -16,9 +16,9 @@
     }
 
     .title {
-      font-size: 20px;
+      font-size: 30px;
       font-weight: 600;
-      color: #444;
+      color: #1A5432 ;
       transition: all 0.4s ease;
 
       &:hover {
@@ -67,6 +67,13 @@
           background-color: whitesmoke;
           padding: 5px;
           border-radius: 5px;
+          
+        }
+        .level {
+          background-color: #D42617;
+          padding: 5px;
+          border-radius: 5px;
+          color: #FBE3D9;
         }
       }
 

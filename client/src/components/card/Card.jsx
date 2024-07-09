@@ -16,20 +16,21 @@ function Card({ item }) {
         <p className="codeRequest">
           <span>Code :{item.id}</span>
         </p>
-        
-        <p className="type"> Blood Type: {item.type}</p>
+        <p className="type"> Blood Type: {item.bloodGroup.map(item=>
+          "   [" + item.split() + "   ]" 
+        )}</p>
         <p className="address">
           <img src={ Pin } alt="" />
           <span>{item.address}</span>
         </p>
         <div className="bottom">
           <div className="features">
-            <div className="feature">
-              <span>Level {item.level}</span>
+            <div className="level">
+              <span >Level {item.level}</span>
             </div>
             <div className="feature">
               <img src={ People } alt="" />
-              <span>{item.nbr} donor needed</span>
+              <span>{item.neededDonors} donor needed</span>
             </div>
           </div>
           <div className="icons">
