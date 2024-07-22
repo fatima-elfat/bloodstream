@@ -28,16 +28,8 @@ function App() {
           element:<BanksPage/>
         },
         {
-          path:"/banks/:id",
-          element:<BankPage/>
-        },
-        {
           path:"/donations",
           element:<ListPage/>
-        },
-        {
-          path:"/:id",
-          element:<SinglePage/>
         },
         {
           path:"/login",
@@ -60,6 +52,14 @@ function App() {
         {
           path: "/profile/update",
           element: <ProfileUpdatePage />,
+        },
+        {
+          path:"/:id",
+          element:<SinglePage/>
+        },
+        {
+          path:"/banks/:id",
+          element:<BankPage/>
         },
       ],
     },

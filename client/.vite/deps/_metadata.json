@@ -1,8 +1,49 @@
 {
-  "hash": "4613e013",
+  "hash": "a37b803b",
   "configHash": "b78645ef",
-  "lockfileHash": "e3b0c442",
-  "browserHash": "4821a8e3",
-  "optimized": {},
-  "chunks": {}
+  "lockfileHash": "02061325",
+  "browserHash": "9d61eab3",
+  "optimized": {
+    "react": {
+      "src": "../../node_modules/react/index.js",
+      "file": "react.js",
+      "fileHash": "a1d482de",
+      "needsInterop": true
+    },
+    "react-dom/client": {
+      "src": "../../node_modules/react-dom/client.js",
+      "file": "react-dom_client.js",
+      "fileHash": "710ed6ab",
+      "needsInterop": true
+    },
+    "react-router-dom": {
+      "src": "../../node_modules/react-router-dom/dist/index.js",
+      "file": "react-router-dom.js",
+      "fileHash": "64aea2ca",
+      "needsInterop": false
+    },
+    "axios": {
+      "src": "../../node_modules/axios/index.js",
+      "file": "axios.js",
+      "fileHash": "faf3d4f0",
+      "needsInterop": false
+    },
+    "react-leaflet": {
+      "src": "../../node_modules/react-leaflet/lib/index.js",
+      "file": "react-leaflet.js",
+      "fileHash": "1aadfbec",
+      "needsInterop": false
+    }
+  },
+  "chunks": {
+    "chunk-MZQMFKLV": {
+      "file": "chunk-MZQMFKLV.js"
+    },
+    "chunk-4X3XUJ2M": {
+      "file": "chunk-4X3XUJ2M.js"
+    },
+    "chunk-G3PMV62Z": {
+      "file": "chunk-G3PMV62Z.js"
+    }
+  }
 }
