@@ -29,6 +29,8 @@ model User {
   isTech        Boolean     @default(false)
   isDonnor      Boolean     @default(false)
   createdAt     DateTime    @default(now())
+  tfEnabled     Boolean      @default(false)
+  tfSecret      String     @default("")
   tech          Tech?
   donor         Donor?
 }
