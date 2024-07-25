@@ -1,6 +1,8 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import prisma from "../tools/prisma.js";
+import sendEmail from "../tools/mailer.js";
+import crypto from "crypto";
 
 export const register = async (req, res) => {
   const { username, email, password } = req.body;
@@ -50,18 +52,48 @@ export const login = async (req, res) => {
 
     if (!isPasswordValid)
       return res.status(400).json({ message: "Invalid Credentials!" });
+    const { password: userPassword, ...userInfo } = user;
     const age = 1000 * 60 * 60 * 24 * 7;
+    if (!userInfo.verified) {
+			let token = await prisma.token.findUnique({
+        where: { id: userInfo.id },
+      });
+			try {
+        if (!token) {
+				  token = await prisma.token.create({
+            data: {
+              id: userInfo.id,
+					    value: crypto.randomBytes(32).toString("hex")
+            }});
+          const response = await prisma.$runCommandRaw({
+            createIndexes: 'Token',
+            indexes: [
+              {
+                key: {
+                  createdAt: 1,
+                },
+                name: 'createdAt_ttl',
+                expireAfterSeconds: 120,
+              },
+            ],
+          });
+				  const url = `${process.env.CLIENT_URL}/${userInfo.id}/verify/${token.value}`;
+				  await sendEmail(userInfo, "BloodStream: Verify Email", url);
+          }
+          return res.status(400).send({ message: "An Email sent to your account please verify" });
+			}catch (err) {
+          console.log(err);
+          return res.status(500).json({ message: "Failed to dend Email!" });
+      }}
     const token = jwt.sign(
       {
         id: user.id,
-        isAdmin: false,
+        isAdmin: userInfo.isAdmin,
       },
       process.env.JWT_KEY,
       { expiresIn: age }
     );
-
-    const { password: userPassword, ...userInfo } = user;
-    console.log(userInfo)
+    //console.log(userInfo)
     res
       .cookie("token", token, {
         httpOnly: true,
@@ -70,7 +102,7 @@ export const login = async (req, res) => {
       .status(200)
       .json(userInfo);
   } catch (err) {
-    //console.log(err);
+    console.log(err);
     return res.status(500).json({ message: "Failed to login!" });
   }
 };

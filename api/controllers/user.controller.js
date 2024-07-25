@@ -1,6 +1,9 @@
 import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
 import prisma from "../tools/prisma.js";
+import crypto from "crypto";
+import * as otpauth from "otpauth";
+import * as qrcode from "qrcode";
+import base32 from "base32";
 
 export const addUser = async (req, res) => {
     const id = req.params.id;
@@ -45,7 +48,7 @@ export const addUser = async (req, res) => {
           },
         });
         return res.status(201).json({ message: "User created successfully" });
-      } catch (err) {
+      } catch (error) {
         return res.status(500).json({ message: "Failed to create user!" });
       }
   };
@@ -58,8 +61,8 @@ export const getUsers = async (req, res) => {
     }
   });
     res.status(200).json(users);
-  } catch (err) {
-    console.log(err);
+  } catch (error) {
+    console.log(error);
     res.status(500).json({ message: "Failed to get users!" });
   }
 };
@@ -72,8 +75,8 @@ export const getUser = async (req, res) => {
     });
     const { password: userPassword, ...rest } = user;
     res.status(200).json(rest);
-  } catch (err) {
-    console.log(err);
+  } catch (error) {
+    console.log(error);
     res.status(500).json({ message: "Failed to get user!" });
   }
 };
@@ -103,8 +106,8 @@ export const updateUser = async (req, res) => {
     const { password, ...rest } = updatedUser;
 
     res.status(200).json(rest);
-  } catch (err) {
-    console.log(err);
+  } catch (error) {
+    console.log(error);
     res.status(500).json({ message: "Failed to update users!" });
   }
 };
@@ -120,7 +123,7 @@ export const deleteUser = async (req, res) => {
     return res.status(403).json({ message: "Not Authorized!" });
   }
   
-  const updatedUser = await prisma.tech.update({
+  await prisma.tech.update({
     where: { userid: id },
     data: {
         userId: null,
@@ -131,8 +134,125 @@ export const deleteUser = async (req, res) => {
       where: { id },
     });
     res.status(200).json({ message: "User deleted" });
-  } catch (err) {
-    console.log(err);
+  } catch (error) {
+    console.log(error);
     res.status(500).json({ message: "Failed to delete users!" });
   }
+};
+
+export const verifyEmail = async (req, res) => {
+  try {
+		const user = await prisma.user.findUnique({
+      where: { id: req.params.id }
+    });
+		if (!user) return res.status(400).send({ message: "Invalid link" });
+		const token = await prisma.token.findUnique({
+      where:{
+        id: user.id,
+        value: req.params.token,
+      }
+		});
+		if (!token) return res.status(400).send({ message: "Invalid link" });
+		await prisma.user.update({
+      where: { id: user.id },
+      data: {
+        verified: true,
+      },
+    });
+    await prisma.token.delete({
+      where: { id: user.id },
+    });
+		res.status(200).send({ message: "Email verified successfully" });
+	} catch (error) {
+    console.log(error)
+		res.status(500).send({ message: "Internal Server Error" });
+	}
+};
+
+export const generateMfA = async (req, res) => {
+  const userId = req.userId 
+  const user =  await prisma.user.findUnique({
+    where: { id: userId },
+  });
+  if (!user) return res.status(400).send({
+    message: "Failed to get users!"
+  });
+  if (user.tfEnabled) {
+    return res.status(400).send({ message: "2FA already enabled" });
+  }
+  const buffer = crypto.randomBytes(15);
+  const secret = base32.encode(buffer).replace(/[0198=]/g, "").substring(0, 24);
+  
+  await prisma.user.update({
+    where: { id: userId },
+    data: {
+      tfSecret: secret,
+    },
+  });
+  let otp = new otpauth.TOTP({
+    issuer: "bloodstream.ma",
+    label: "BloodStream",
+    algorithm: "SHA1",
+    digits: 6,
+    secret: secret,
+  });
+  let otpUrl = otp.toString();
+  await qrcode.toDataURL(otpUrl, (error, qrUrl) => {
+    if(error) {
+      return res.status(500).send({ message: "Error generating QR code" });
+    }
+    res.status(200).json({ data: {
+      qrCodeUrl: qrUrl,
+      secret: secret
+    }}); 
+  });
+};
+
+export const verifyMfA = async (req, res) => {
+  const userId = req.userId
+  const token = req.body
+  const user =  await prisma.user.findUnique({
+    where: { id: userId },
+  });
+  if (!user) return res.status(400).send({
+    message: "Failed to get users!"
+  });
+  let otp = new otpauth.TOTP({
+    issuer: "bloodstream.ma",
+    label: "BloodStream",
+    algorithm: "SHA1",
+    digits: 6,
+    secret: user.tfSecret,
+  });
+  if(otp.validate({ token })) {
+    if (!user.tfEnabled) {
+      await prisma.user.update({
+        where: { id: userId },
+        data: {
+          tfEnabled: true,
+        },
+      });
+    }
+    res.status(200).json({message: "2F verification  successful"})
+  } else {
+    res.status(500).json({ message: "Failed to login!" });
+  }
+};
+
+export const deleteMfA = async (req, res) => {
+  const userId = req.userId
+  const user =  await prisma.user.findUnique({
+    where: { id: userId },
+  });
+  if (!user) return res.status(400).send({
+    message: "Failed to get users!"
+  });
+  await prisma.user.update({
+    where: { id: userId },
+    data: {
+      tfEnabled: false,
+      tfSecret: "",
+    },
+  });
+  res.status(200).json({message: "2F disabled  successfully"})
 };

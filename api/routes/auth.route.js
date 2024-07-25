@@ -8,8 +8,5 @@ router.post("/register", register);
 router.post("/login", login);
 router.post("/logout", logout);
 router.get("/user", verifyToken, currentUser);
-router.get("/test", (req,res) =>{
-    res.send("Working This router")
-});
 
 export default router;

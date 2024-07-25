@@ -29,18 +29,19 @@ model User {
   isTech        Boolean     @default(false)
   isDonnor      Boolean     @default(false)
   createdAt     DateTime    @default(now())
-  tfEnabled     Boolean      @default(false)
-  tfSecret      String     @default("")
+  verified     Boolean      @default(false)
+  tfEnabled     Boolean     @default(false)
+  tfSecret      String      @default("")
   tech          Tech?
   donor         Donor?
 }
 
 model Tech {
-  id         String      @id @default(auto()) @map("_id") @db.ObjectId
+  id         String       @id @default(auto()) @map("_id") @db.ObjectId
   title      String
-  createdAt  DateTime    @default(now())
+  createdAt  DateTime     @default(now())
   user       User?        @relation(fields: [userId], references: [id], onDelete: SetNull, onUpdate: Cascade)
-  userId     String?     @unique @db.ObjectId
+  userId     String?      @unique @db.ObjectId
   bank       Bank?        @relation(fields: [bankId], references: [id], onDelete: SetNull, onUpdate: Cascade)
   bankId     String?      @unique @db.ObjectId
   donation   Donation?
@@ -55,36 +56,42 @@ model Bank {
 }
 
 model Donation {
-  id            String      @id @default(auto()) @map("_id") @db.ObjectId
-  title         String
+  id            String       @id @default(auto()) @map("_id") @db.ObjectId
+  title         String 
   description   String
   bloodGroup    String[]
   level         String
   neededDonors  Int
-  createdAt     DateTime    @default(now())
+  createdAt     DateTime     @default(now())
   tech          Tech?        @relation(fields: [techId], references: [id], onDelete: SetNull, onUpdate: Cascade)
   techId        String?      @unique @db.ObjectId
   donationR     DonationRecord?
 }
 
 model Donor {
-  id            String      @id @default(auto()) @map("_id") @db.ObjectId
+  id            String       @id @default(auto()) @map("_id") @db.ObjectId
   firstName     String
   lastName      String
   bloodType     String
   lastDonation  DateTime?
-  createdAt     DateTime    @default(now())
+  createdAt     DateTime     @default(now())
   user          User?        @relation(fields: [userId], references: [id], onDelete: SetNull, onUpdate: Cascade)
   userId        String?      @unique @db.ObjectId
   donationR     DonationRecord?
 }
 
 model DonationRecord {
-  id            String      @id @default(auto()) @map("_id") @db.ObjectId
+  id            String       @id @default(auto()) @map("_id") @db.ObjectId
   bloodVolume   Int
-  createdAt     DateTime    @default(now())
-  donor         Donor?        @relation(fields: [donorId], references: [id], onDelete: SetNull, onUpdate: Cascade)
+  createdAt     DateTime     @default(now())
+  donor         Donor?       @relation(fields: [donorId], references: [id], onDelete: SetNull, onUpdate: Cascade)
   donorId       String?      @unique @db.ObjectId
-  donation      Donation?       @relation(fields: [donationId], references: [id], onDelete: SetNull, onUpdate: Cascade)
+  donation      Donation?    @relation(fields: [donationId], references: [id], onDelete: SetNull, onUpdate: Cascade)
   donationId    String?      @unique @db.ObjectId
+}
+
+model Token {
+  id            String       @id  @map("_id") @db.ObjectId
+  value         String
+  createdAt     DateTime     @default(now())
 }
